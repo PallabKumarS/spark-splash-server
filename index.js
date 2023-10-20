@@ -31,6 +31,7 @@ async function run() {
 
     // collection
     const productsCollection = client.db("productsDB").collection("products");
+    const cartCollection = client.db("productsDB").collection("cart");
 
     // getting data
 
@@ -70,26 +71,29 @@ async function run() {
     });
 
     // update data
-    // app.put("/coffee/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const options = { upsert: true };
-    //   const updatedCoffee = req.body;
-    //   const coffee = {
-    //     $set: {
-    //       name: updatedCoffee.name,
-    //       quantity: updatedCoffee.quantity,
-    //       supplier: updatedCoffee.supplier,
-    //       taste: updatedCoffee.taste,
-    //       category: updatedCoffee.category,
-    //       details: updatedCoffee.details,
-    //       photo: updatedCoffee.photo,
-    //     },
-    //   };
-    //   const result = await coffeeCollection.updateOne(query, coffee, options);
-    //   res.send(result);
-    //   console.log("Coffee Updated Successfully");
-    // });
+    app.put("/products/:brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = req.body;
+      const product = {
+        $set: {
+          name: updatedProduct.name,
+          brand: updatedProduct.quantity,
+          type: updatedProduct.supplier,
+          price: updatedProduct.taste,
+          rating: updatedProduct.rating,
+          photo: updatedProduct.photo,
+        },
+      };
+      const result = await productsCollection.updateOne(
+        query,
+        product,
+        options
+      );
+      res.send(result);
+      console.log("Product Updated Successfully");
+    });
 
     // delete data
     // app.delete("/coffee/:id", async (req, res) => {
