@@ -41,13 +41,13 @@ async function run() {
       console.log("All Products Data Loaded");
     });
 
-    // get brands data
+    // get products data by brand name
     app.get("/products/:brand", async (req, res) => {
       const brand = req.params.brand;
       const query = { brand: brand };
       const result = await productsCollection.find(query).toArray();
       res.send(result);
-      console.log("one Data Found");
+      console.log("Data Found");
     });
 
     // get one product data
