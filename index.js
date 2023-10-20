@@ -33,26 +33,24 @@ async function run() {
     const productsCollection = client.db("productsDB").collection("products");
     const cartCollection = client.db("productsDB").collection("cart");
 
-    // getting data
-
-    // all data
+    // get all products data
     app.get("/products", async (req, res) => {
       const products = productsCollection.find();
       const result = await products.toArray();
       res.send(result);
-      console.log("all data loaded");
+      console.log("All Products Data Loaded");
     });
 
-    // get brands data data
+    // get brands data
     app.get("/products/:brand", async (req, res) => {
       const brand = req.params.brand;
       const query = { brand: brand };
       const result = await productsCollection.find(query).toArray();
       res.send(result);
-      console.log("one data found");
+      console.log("one Data Found");
     });
 
-    // get one product data data
+    // get one product data
     app.get("/products/:brand/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
@@ -62,7 +60,7 @@ async function run() {
       console.log("one data found");
     });
 
-    // posting data
+    // posting product data
     app.post("/products", async (req, res) => {
       const newProduct = req.body;
       const result = await productsCollection.insertOne(newProduct);
@@ -70,7 +68,7 @@ async function run() {
       console.log("Products Added Successfully");
     });
 
-    // update data
+    // update product data
     app.put("/products/:brand/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -95,14 +93,30 @@ async function run() {
       console.log("Product Updated Successfully");
     });
 
+    // posting cart data
+    app.post("/cart", async (req, res) => {
+      const product = req.body;
+      const result = await cartCollection.insertOne(product);
+      res.send(result);
+      console.log("Product Added To Cart Successfully");
+    });
+
+    // get cart data
+    app.get("/cart", async (req, res) => {
+      const cart = cartCollection.find();
+      const result = await cart.toArray();
+      res.send(result);
+      console.log("Cart Data Loaded");
+    });
+
     // delete data
-    // app.delete("/coffee/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await clientCollection.deleteOne(query);
-    //   res.send(result);
-    //   console.log("Coffee Deleted Successfully");
-    // });
+    app.delete("/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartCollection.deleteOne(query);
+      res.send(result);
+      console.log("Product Deleted Successfully");
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
