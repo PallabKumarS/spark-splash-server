@@ -30,12 +30,75 @@ async function run() {
     await client.connect();
 
     // collection
-    const brandsCollection = client.db("brandsDB").collection("brands");
     const productsCollection = client.db("productsDB").collection("products");
 
     // getting data
 
-    
+    // all data
+    app.get("/products", async (req, res) => {
+      const products = productsCollection.find();
+      const result = await products.toArray();
+      res.send(result);
+      console.log("all data loaded");
+    });
+
+    // get brands data data
+    app.get("/products/:brand", async (req, res) => {
+      const brand = req.params.brand;
+      const query = { brand: brand };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+      console.log("one data found");
+    });
+
+    // get one product data data
+    app.get("/products/:brand/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await productsCollection.findOne(query);
+      res.send(result);
+      console.log("one data found");
+    });
+
+    // posting data
+    app.post("/products", async (req, res) => {
+      const newProduct = req.body;
+      const result = await productsCollection.insertOne(newProduct);
+      res.send(result);
+      console.log("Products Added Successfully");
+    });
+
+    // update data
+    // app.put("/coffee/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: new ObjectId(id) };
+    //   const options = { upsert: true };
+    //   const updatedCoffee = req.body;
+    //   const coffee = {
+    //     $set: {
+    //       name: updatedCoffee.name,
+    //       quantity: updatedCoffee.quantity,
+    //       supplier: updatedCoffee.supplier,
+    //       taste: updatedCoffee.taste,
+    //       category: updatedCoffee.category,
+    //       details: updatedCoffee.details,
+    //       photo: updatedCoffee.photo,
+    //     },
+    //   };
+    //   const result = await coffeeCollection.updateOne(query, coffee, options);
+    //   res.send(result);
+    //   console.log("Coffee Updated Successfully");
+    // });
+
+    // delete data
+    // app.delete("/coffee/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: new ObjectId(id) };
+    //   const result = await clientCollection.deleteOne(query);
+    //   res.send(result);
+    //   console.log("Coffee Deleted Successfully");
+    // });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
