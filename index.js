@@ -27,7 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // collection
     const productsCollection = client.db("productsDB").collection("products");
@@ -77,9 +77,9 @@ async function run() {
       const product = {
         $set: {
           name: updatedProduct.name,
-          brand: updatedProduct.quantity,
-          type: updatedProduct.supplier,
-          price: updatedProduct.taste,
+          brand: updatedProduct.brand,
+          type: updatedProduct.type,
+          price: updatedProduct.price,
           rating: updatedProduct.rating,
           photo: updatedProduct.photo,
         },
